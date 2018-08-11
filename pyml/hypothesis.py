@@ -9,14 +9,15 @@ class Hypothesis:
     _var_index = re.compile(r'[Xx]?(?P<index>\d+)')
     _default_apply_function = lambda x: x
 
-    def __init__(self, *init_theta, **applied_function):
+    def __init__(self, *init_theta, equation=None, **applied_function):
+        self._equation = equation
         self._thetas = list(init_theta)
         self._applied_function = dict()
         duplicated_names = []
         invalid_names = []
         for theta, function in applied_function.items():
             if theta not in self._applied_function:
-                match = re.match(Hypothesis._param_index, theta)
+                match = re.match(Hypothesis._var_index, theta)
                 if match:
                     theta_index = int(match.group('index'))
                     if theta_index < len(self._thetas):
@@ -72,10 +73,14 @@ class Hypothesis:
             else:
                 raise ValueError(f'{param} are invalid !! Should be something like this: Th*, th*, Theta* or theta*')
 
-    def __call__(self, **kwargs):
+    def __call__(self, *values, **kwargs):
         x = dict()
         duplicated_names = []
         invalid_names = []
+        index = 0
+        for value in values:
+            x[index] = value
+            index += 1
         for name, value in kwargs.items():
             if name not in x:
                 match = re.match(Hypothesis._var_index, name)
