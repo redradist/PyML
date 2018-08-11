@@ -74,16 +74,14 @@ class Linear:
         hypothesis = Hypothesis(*self._thetas)
         num_examples = len(self._training_examples)
         while index_theta < len(temp_thetas):
-            sum_of_example = 0
+            sum_of_examples = 0
             for num_example in range(0, num_examples):
-                x_mult = 1
-                if index_theta != 0:
-                    x_mult = self._training_examples[num_example][Linear.params_index][index_theta]
+                x_index_theta = self._training_examples[num_example][Linear.params_index][index_theta]
                 hyp_res = hypothesis(*self._training_examples[num_example][Linear.params_index])
                 res = self._training_examples[num_example][Linear.result_index]
-                sum_of_example += (hyp_res - res) * x_mult
-            temp_thetas[index_theta] = self._thetas[index_theta] - self._alpha * sum_of_example / num_examples
+                sum_of_examples += (hyp_res - res) * x_index_theta
+            temp_thetas[index_theta] = self._thetas[index_theta] - self._alpha * sum_of_examples / num_examples
             if math.isnan(temp_thetas[index_theta]):
-                raise ValueError('Value of theta is exceeded more then nan')
+                raise ValueError(f'Value of theta[index_theta={index_theta}] is exceeded the limit !!')
             index_theta += 1
         self._thetas = temp_thetas
