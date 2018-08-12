@@ -2,7 +2,6 @@ import math
 import unittest
 
 from pyml.neural_network.neuron import Neuron
-from pyml.regression.models.linear import Linear
 
 
 class Testing_LinearRegression(unittest.TestCase):
@@ -38,7 +37,7 @@ class Testing_LinearRegression(unittest.TestCase):
                                msg='Values are not equals !! '
                                    'Neuron output value is not valid !!')
 
-    def test__NeuronConnection_RightShiftOpr__Valid(self):
+    def test__TwoNeuronsConnection_RightShiftOpr__Valid(self):
         neuron0 = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
         neuron1 = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
         neuron0 >> neuron1
@@ -49,6 +48,29 @@ class Testing_LinearRegression(unittest.TestCase):
                                    'Neuron output value is not valid !!')
         self.assertAlmostEqual(neuron1.output(),
                                10000,
+                               places=0,
+                               msg='Values are not equals !! '
+                                   'Neuron output value is not valid !!')
+
+    def test__ThreeNeuronsConnection_RightShiftOpr__Valid(self):
+        neuron0 = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
+        neuron1 = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
+        neuron2 = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
+        neuron0 >> neuron1
+        neuron0 >> neuron2
+        neuron1 >> neuron2
+        self.assertAlmostEqual(neuron0.output(2, 1, 3, 4),
+                               100,
+                               places=0,
+                               msg='Values are not equals !! '
+                                   'Neuron output value is not valid !!')
+        self.assertAlmostEqual(neuron1.output(),
+                               10000,
+                               places=0,
+                               msg='Values are not equals !! '
+                                   'Neuron output value is not valid !!')
+        self.assertAlmostEqual(neuron2.output(),
+                               102010000,
                                places=0,
                                msg='Values are not equals !! '
                                    'Neuron output value is not valid !!')

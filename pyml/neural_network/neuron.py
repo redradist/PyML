@@ -2,8 +2,8 @@ import inspect
 
 
 def is_neurons_same_level_type(first_neuron, second_neuron):
-    has_level = ('level' in first_neuron and 'level' in second_neuron)
-    has_not_level = ('level' not in first_neuron and 'level' not in second_neuron)
+    has_level = (first_neuron.level is not None and second_neuron.level is not None)
+    has_not_level = (first_neuron.level is None and second_neuron.level is None)
     return has_level or has_not_level, has_level
 
 
@@ -36,7 +36,7 @@ class Neuron:
             self._value = value
             self._tie_neuron[self._slot_index] = self._value
 
-    def __init__(self, *thetas, bias=None, activation_func=None):
+    def __init__(self, *thetas, bias=None, activation_func=None, level=None):
         if activation_func:
             arg_spec = inspect.signature(activation_func)
             if len(arg_spec.parameters) != 1:
@@ -48,6 +48,7 @@ class Neuron:
         self._next_slot = 0
         self._output = 0
         self._activation = activation_func
+        self.level = level
 
     def __lshift__(self, neuron):
         neuron._connect_to(self)
