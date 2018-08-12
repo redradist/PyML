@@ -37,3 +37,33 @@ class Testing_LinearRegression(unittest.TestCase):
                                places=0,
                                msg='Values are not equals !! '
                                    'Neuron output value is not valid !!')
+
+    def test__NeuronConnection0__Valid(self):
+        neuron0 = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
+        neuron1 = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
+        neuron0 >> neuron1
+        self.assertAlmostEqual(neuron0.output(2, 1, 3, 4),
+                               100,
+                               places=0,
+                               msg='Values are not equals !! '
+                                   'Neuron output value is not valid !!')
+        self.assertAlmostEqual(neuron1.output(),
+                               10000,
+                               places=0,
+                               msg='Values are not equals !! '
+                                   'Neuron output value is not valid !!')
+
+    def test__NeuronConnection1__Valid(self):
+        neuron0 = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
+        neuron1 = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
+        neuron0 << neuron1
+        self.assertAlmostEqual(neuron1.output(2, 1, 3, 4),
+                               100,
+                               places=0,
+                               msg='Values are not equals !! '
+                                   'Neuron output value is not valid !!')
+        self.assertAlmostEqual(neuron0.output(),
+                               10000,
+                               places=0,
+                               msg='Values are not equals !! '
+                                   'Neuron output value is not valid !!')
