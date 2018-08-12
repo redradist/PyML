@@ -14,7 +14,7 @@ class Testing_LinearRegression(unittest.TestCase):
         """Currently nothing to do. Use it for reinitialization data after test"""
         pass
 
-    def test__Neuron__Valid(self):
+    def test__Neuron_LinearOutput__Valid(self):
         neuron = Neuron(1, 1, 1, 1, activation_func=lambda y: y)
         self.assertAlmostEqual(neuron.output(2, 1, 3, 4),
                                10,
@@ -22,7 +22,7 @@ class Testing_LinearRegression(unittest.TestCase):
                                msg='Values are not equals !! '
                                    'Neuron output value is not valid !!')
 
-    def test__Neuron1__Valid(self):
+    def test__Neuron_ExponentialOutput__Valid(self):
         neuron = Neuron(1, 1, 1, 1, activation_func=lambda y: math.exp(y))
         self.assertAlmostEqual(neuron.output(2, 1, 3, 4),
                                22026,
@@ -30,7 +30,7 @@ class Testing_LinearRegression(unittest.TestCase):
                                msg='Values are not equals !! '
                                    'Neuron output value is not valid !!')
 
-    def test__Neuron2__Valid(self):
+    def test__Neuron_SquareOutput__Valid(self):
         neuron = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
         self.assertAlmostEqual(neuron.output(2, 1, 3, 4),
                                100,
@@ -38,7 +38,7 @@ class Testing_LinearRegression(unittest.TestCase):
                                msg='Values are not equals !! '
                                    'Neuron output value is not valid !!')
 
-    def test__NeuronConnection0__Valid(self):
+    def test__NeuronConnection_RightShiftOpr__Valid(self):
         neuron0 = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
         neuron1 = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
         neuron0 >> neuron1
@@ -53,7 +53,7 @@ class Testing_LinearRegression(unittest.TestCase):
                                msg='Values are not equals !! '
                                    'Neuron output value is not valid !!')
 
-    def test__NeuronConnection1__Valid(self):
+    def test__NeuronConnection1_LeftShiftOpr__Valid(self):
         neuron0 = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
         neuron1 = Neuron(1, 1, 1, 1, activation_func=lambda y: math.pow(y, 2))
         neuron0 << neuron1
