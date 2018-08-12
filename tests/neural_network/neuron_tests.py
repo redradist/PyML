@@ -1,7 +1,7 @@
 import math
 import unittest
 
-from pyml.neural_network.neuron import Neuron
+from pyml.neural.neuron import Neuron
 
 
 class Testing_LinearRegression(unittest.TestCase):
