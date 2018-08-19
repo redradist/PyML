@@ -1,12 +1,6 @@
 import inspect
 
 
-def is_neurons_same_level_type(first_neuron, second_neuron):
-    has_level = (first_neuron._level is not None and second_neuron._level is not None)
-    has_not_level = (first_neuron._level is None and second_neuron._level is None)
-    return has_level or has_not_level, has_level
-
-
 class Neuron:
     """
     Neuron class for calculating output of the Neuron
@@ -36,6 +30,13 @@ class Neuron:
             self._value = value
             self._tie_neuron[self._slot_index] = self._value
 
+    @staticmethod
+    def is_neurons_same_level_type(first_neuron, second_neuron):
+        has_level = (first_neuron._level is not None and second_neuron._level is not None)
+        has_not_level = (first_neuron._level is None and second_neuron._level is None)
+        same_level_type = has_level or has_not_level
+        return same_level_type, has_level
+
     def __init__(self, *thetas, bias=None, level_number=None, activation_function=None):
         if activation_function:
             arg_spec = inspect.signature(activation_function)
@@ -58,7 +59,7 @@ class Neuron:
         self._connect_to(neuron)
 
     def _connect_to(self, neuron):
-        same_level_type, has_level = is_neurons_same_level_type(self, neuron)
+        same_level_type, has_level = Neuron.is_neurons_same_level_type(self, neuron)
         if not same_level_type:
             raise ValueError(f'Neuron [{self}] and Neuron [{neuron}] different level types !!')
 

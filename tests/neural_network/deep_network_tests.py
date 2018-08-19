@@ -13,7 +13,7 @@ class Testing_DeepNetwork(unittest.TestCase):
         """Currently nothing to do. Use it for reinitialization data after test"""
         pass
 
-    def test__Neuron_DeepNetwork__Valid(self):
+    def test__Neuron_DeepNetwork_3Inputs_1Middle_2Outputs__Valid(self):
         network = DeepNetwork(number_of_inputs=3,
                               number_of_levels=1,
                               neurons_per_level=4,
@@ -23,14 +23,45 @@ class Testing_DeepNetwork(unittest.TestCase):
         # network.remove_data(some_data)
         # network.clear_data()
         # network.learn()
-        print('')
-        results = network.output(0.2, 2, 1)
-        for result in results:
-            print(f'Result is {result}')
+        results = network.outputs(1, 1, 1)
         # network.save_to()
         # network.save_to_file()
-        # self.assertAlmostEqual(network.output(2, 1, 3, 4),
-        #                        10,
-        #                        places=5,
-        #                        msg='Values are not equals !! '
-        #                            'Neuron output value is not valid !!')
+        self.assertAlmostEqual(results[0],
+                               0.819428384834,
+                               places=5,
+                               msg='Values are not equals !! '
+                                   'Neuron output value is not valid !!')
+        self.assertAlmostEqual(results[1],
+                               0.819428384834,
+                               places=5,
+                               msg='Values are not equals !! '
+                                   'Neuron output value is not valid !!')
+
+    def test__Neuron_DeepNetwork_3Inputs_1Middle_3Outputs__Valid(self):
+        network = DeepNetwork(number_of_inputs=3,
+                              number_of_levels=1,
+                              neurons_per_level=4,
+                              number_of_classes=3,
+                              activation_function=lambda y: math.exp(-y))
+        # network.load_data([1, 2, 3])
+        # network.remove_data(some_data)
+        # network.clear_data()
+        # network.learn()
+        results = network.outputs(1, 1, 1)
+        # network.save_to()
+        # network.save_to_file()
+        self.assertAlmostEqual(results[0],
+                               0.819428384834,
+                               places=5,
+                               msg='Values are not equals !! '
+                                   'Neuron output value is not valid !!')
+        self.assertAlmostEqual(results[1],
+                               0.819428384834,
+                               places=5,
+                               msg='Values are not equals !! '
+                                   'Neuron output value is not valid !!')
+        self.assertAlmostEqual(results[2],
+                               0.819428384834,
+                               places=5,
+                               msg='Values are not equals !! '
+                                   'Neuron output value is not valid !!')

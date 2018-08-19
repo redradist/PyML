@@ -10,12 +10,15 @@ class DeepNetwork:
                  neurons_per_level,
                  number_of_classes,
                  activation_function=lambda x: x):
+
+        # Create neurons inputs (detectors)
         self._inputs = []
         for num_level in range(0, number_of_inputs):
             self._inputs.append(Neuron(1,
                                        activation_function=lambda x: x,
                                        level_number=0))
 
+        # Create middle neurons
         prev_level = self._inputs
         for num_level in range(1, number_of_levels + 1):
             curr_level = []
@@ -28,10 +31,11 @@ class DeepNetwork:
             DeepNetwork.connect_levels(prev_level, curr_level)
             prev_level = curr_level
 
+        # Create output neurons
         self._outputs = []
         for num_output_level in range(0, number_of_classes):
             neuron = Neuron(1,
-                            activation_function=lambda y: math.exp(y),
+                            activation_function=activation_function,
                             level_number=number_of_levels + 1)
             self._outputs.append(neuron)
         DeepNetwork.connect_levels(prev_level, self._outputs)
@@ -66,7 +70,7 @@ class DeepNetwork:
     def clear_data(self):
         pass
 
-    def output(self, *args):
+    def outputs(self, *args):
         if not args:
             raise ValueError()
         elif len(args) == 1:
@@ -77,8 +81,10 @@ class DeepNetwork:
         return self.activate()
 
     def activate(self):
+        outputs = []
         for output in self._outputs:
-            yield output.activate()
+            outputs.append(output.activate())
+        return outputs
 
     def __call__(self, *args, **kwargs):
         pass
