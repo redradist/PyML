@@ -14,11 +14,11 @@ class Testing_DeepNetwork(unittest.TestCase):
         pass
 
     def test__Neuron_DeepNetwork__Valid(self):
-        network = DeepNetwork(inputs=3,
-                              levels=1,
+        network = DeepNetwork(number_of_inputs=3,
+                              number_of_levels=1,
                               neurons_per_level=4,
-                              classes=2,
-                              activation_func=lambda y: math.exp(-y))
+                              number_of_classes=2,
+                              activation_function=lambda y: math.exp(-y))
         # network.load_data([1, 2, 3])
         # network.remove_data(some_data)
         # network.clear_data()

@@ -4,30 +4,35 @@ from pyml.neural.neuron import Neuron
 
 
 class DeepNetwork:
-    def __init__(self, inputs, levels, neurons_per_level, classes, activation_func=lambda y: math.exp(y)):
+    def __init__(self,
+                 number_of_inputs,
+                 number_of_levels,
+                 neurons_per_level,
+                 number_of_classes,
+                 activation_function=lambda x: x):
         self._inputs = []
-        for num_level in range(0, inputs):
+        for num_level in range(0, number_of_inputs):
             self._inputs.append(Neuron(1,
-                                       activation_func=lambda x: x,
-                                       level=0))
+                                       activation_function=lambda x: x,
+                                       level_number=0))
 
         prev_level = self._inputs
-        for num_level in range(1, levels+1):
+        for num_level in range(1, number_of_levels + 1):
             curr_level = []
             for num_neuron in range(0, neurons_per_level):
                 neuron = Neuron(*([1] * neurons_per_level),
-                                activation_func=activation_func,
-                                level=num_level)
+                                activation_function=activation_function,
+                                level_number=num_level)
                 curr_level.append(neuron)
 
             DeepNetwork.connect_levels(prev_level, curr_level)
             prev_level = curr_level
 
         self._outputs = []
-        for num_output_level in range(0, classes):
+        for num_output_level in range(0, number_of_classes):
             neuron = Neuron(1,
-                            activation_func=lambda y: math.exp(y),
-                            level=levels+1)
+                            activation_function=lambda y: math.exp(y),
+                            level_number=number_of_levels + 1)
             self._outputs.append(neuron)
         DeepNetwork.connect_levels(prev_level, self._outputs)
 

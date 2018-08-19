@@ -36,19 +36,19 @@ class Neuron:
             self._value = value
             self._tie_neuron[self._slot_index] = self._value
 
-    def __init__(self, *thetas, bias=None, level=None, activation_func=None):
-        if activation_func:
-            arg_spec = inspect.signature(activation_func)
+    def __init__(self, *thetas, bias=None, level_number=None, activation_function=None):
+        if activation_function:
+            arg_spec = inspect.signature(activation_function)
             if len(arg_spec.parameters) != 1:
-                raise ValueError(f'Activation function [{activation_func}] should have 1 argument !!')
+                raise ValueError(f'Activation function [{activation_function}] should have 1 argument !!')
         self._bias = bias
         self._thetas = list(thetas)
         self._inputs = [None] * len(self._thetas)
         self._slots = []
         self._next_slot = 0
         self._output = 0
-        self._activation = activation_func
-        self._level = level
+        self._activation = activation_function
+        self._level = level_number
         self._is_output_updating = False
 
     def __lshift__(self, neuron):
