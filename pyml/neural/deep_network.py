@@ -14,17 +14,17 @@ class DeepNetwork:
         # Create neurons inputs (detectors)
         self._inputs = []
         for num_level in range(0, number_of_inputs):
-            self._inputs.append(Neuron(1,
-                                       activation_function=lambda x: x,
-                                       level_number=0))
+            neuron = Neuron(activation_function=lambda x: x,
+                            level_number=0)
+            neuron.add_input()
+            self._inputs.append(neuron)
 
         # Create middle neurons
         prev_level = self._inputs
         for num_level in range(1, number_of_levels + 1):
             curr_level = []
             for num_neuron in range(0, neurons_per_level):
-                neuron = Neuron(*([1] * neurons_per_level),
-                                activation_function=activation_function,
+                neuron = Neuron(activation_function=activation_function,
                                 level_number=num_level)
                 curr_level.append(neuron)
 
@@ -34,8 +34,7 @@ class DeepNetwork:
         # Create output neurons
         self._outputs = []
         for num_output_level in range(0, number_of_classes):
-            neuron = Neuron(1,
-                            activation_function=activation_function,
+            neuron = Neuron(activation_function=activation_function,
                             level_number=number_of_levels + 1)
             self._outputs.append(neuron)
         DeepNetwork.connect_levels(prev_level, self._outputs)

@@ -6,7 +6,11 @@ class Neuron:
     Neuron class for calculating output of the Neuron
     """
     class _InputSlot:
-        def __init__(self, tie_neuron, slot_index, value=None):
+        """
+        This class is used for creating connection between two neurons
+        """
+        def __init__(self, neuron, tie_neuron, slot_index, value=None):
+            self._neuron = neuron
             self._tie_neuron = tie_neuron
             self._slot_index = slot_index
             self._value = value
@@ -32,24 +36,24 @@ class Neuron:
 
     @staticmethod
     def is_neurons_same_level_type(first_neuron, second_neuron):
-        has_level = (first_neuron._level is not None and second_neuron._level is not None)
-        has_not_level = (first_neuron._level is None and second_neuron._level is None)
+        has_level = (first_neuron._level_number is not None and second_neuron._level_number is not None)
+        has_not_level = (first_neuron._level_number is None and second_neuron._level_number is None)
         same_level_type = has_level or has_not_level
         return same_level_type, has_level
 
-    def __init__(self, *thetas, bias=None, level_number=None, activation_function=None):
+    def __init__(self, bias=None, level_number=None, activation_function=None):
         if activation_function:
             arg_spec = inspect.signature(activation_function)
             if len(arg_spec.parameters) != 1:
                 raise ValueError(f'Activation function [{activation_function}] should have 1 argument !!')
         self._bias = bias
-        self._thetas = list(thetas)
-        self._inputs = [None] * len(self._thetas)
+        self._thetas = []
+        self._inputs = []
         self._slots = []
         self._next_slot = 0
         self._output = 0
-        self._activation = activation_function
-        self._level = level_number
+        self._activation_function = activation_function
+        self._level_number = level_number
         self._is_output_updating = False
 
     def __lshift__(self, neuron):
@@ -67,14 +71,22 @@ class Neuron:
             if neuron._next_slot >= len(neuron.inputs):
                 neuron._thetas.append(1)
                 neuron._inputs.append(None)
-            if not has_level or neuron._level > self._level:
-                self._slots.append(Neuron._InputSlot(neuron, neuron._next_slot))
+            if not has_level or neuron._level_number > self._level_number:
+                self._slots.append(Neuron._InputSlot(self, neuron, neuron._next_slot))
             else:
                 self._slots.append(Neuron._DeferredInputSlot(neuron, neuron._next_slot))
             neuron._next_slot += 1
         except Exception as ex:
             print(f'Exception caught: {ex}')
             neuron._next_slot -= 1
+
+    def __enter__(self):
+        if self._is_output_updating:
+            raise ValueError(f'Neuron[{self}] is already updating !!')
+        self._is_output_updating = True
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self._is_output_updating = False
 
     def __setitem__(self, slot_index, value):
         self._inputs[slot_index] = value
@@ -86,21 +98,17 @@ class Neuron:
         return self.outputs(*self._inputs)
 
     def outputs(self, *inputs):
-        if self._is_output_updating:
-            raise ValueError(f'Neuron[{self}] is already updating !!')
+        with self:
+            if inputs is not None and len(inputs) > 0:
+                self.inputs = inputs
 
-        self._is_output_updating = True
-        if inputs is not None and len(inputs) > 0:
-            self.inputs = inputs
-
-        bias_value = self._bias if self._bias else 0
-        summary = bias_value + sum(theta * input if input else 0 for theta, input in zip(self._thetas, self.inputs))
-        self._output = summary
-        if self._activation:
-            self._output = self._activation(summary)
-        for slot in self._slots:
-            slot(self._output)
-        self._is_output_updating = False
+            bias_value = self._bias if self._bias else 0
+            summary = bias_value + sum(theta * input if input else 0 for theta, input in zip(self._thetas, self.inputs))
+            self._output = summary
+            if self._activation_function:
+                self._output = self._activation_function(summary)
+            for slot in self._slots:
+                slot(self._output)
         return self._output
 
     @property
@@ -119,6 +127,10 @@ class Neuron:
     def thetas(self):
         return self._thetas
 
+    def add_input(self):
+        self._thetas.append(1)
+        self._inputs.append(None)
+
     @property
     def inputs(self):
         return self._inputs
@@ -131,8 +143,8 @@ class Neuron:
 
     @property
     def activation(self, activation):
-        self._activation = activation
+        self._activation_function = activation
 
     @activation.getter
     def activation(self):
-        return self._activation
+        return self._activation_function
