@@ -4,7 +4,7 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name="pycodec",
+    name="pyml",
     version="0.0.1",
     author="Denis Kotov (redradist, RedRadist, redra, RedRa)",
     author_email="redradist@gmail.com",
