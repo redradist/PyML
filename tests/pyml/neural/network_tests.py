@@ -1,7 +1,7 @@
 import math
 import unittest
 
-from pyml.neural.deep_network import DeepNetwork
+from pyml.neural.network import Network
 
 
 class Testing_DeepNetwork(unittest.TestCase):
@@ -14,11 +14,11 @@ class Testing_DeepNetwork(unittest.TestCase):
         pass
 
     def test__Neuron_DeepNetwork_3Inputs_1Middle_2Outputs__Valid(self):
-        network = DeepNetwork(number_of_inputs=3,
-                              number_of_levels=1,
-                              neurons_per_level=4,
-                              number_of_classes=2,
-                              activation_function=lambda y: math.exp(-y))
+        network = Network(number_of_inputs=3,
+                          number_of_levels=1,
+                          neurons_per_level=4,
+                          number_of_classes=2,
+                          activation_function=lambda y: math.exp(-y))
         # network.load_data([1, 2, 3])
         # network.remove_data(some_data)
         # network.clear_data()
@@ -38,11 +38,11 @@ class Testing_DeepNetwork(unittest.TestCase):
                                    'Neuron output value is not valid !!')
 
     def test__Neuron_DeepNetwork_3Inputs_1Middle_3Outputs__Valid(self):
-        network = DeepNetwork(number_of_inputs=3,
-                              number_of_levels=1,
-                              neurons_per_level=4,
-                              number_of_classes=3,
-                              activation_function=lambda y: math.exp(-y))
+        network = Network(number_of_inputs=3,
+                          number_of_levels=1,
+                          neurons_per_level=4,
+                          number_of_classes=3,
+                          activation_function=lambda y: math.exp(-y))
         # network.load_data([1, 2, 3])
         # network.remove_data(some_data)
         # network.clear_data()

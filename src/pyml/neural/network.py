@@ -1,7 +1,7 @@
 from pyml.neural.neuron import Neuron
 
 
-class DeepNetwork:
+class Network:
     def __init__(self,
                  number_of_inputs,
                  number_of_levels,
@@ -26,7 +26,7 @@ class DeepNetwork:
                                 level_number=num_level)
                 curr_level.append(neuron)
 
-            DeepNetwork.connect_levels(prev_level, curr_level)
+            Network.connect_levels(prev_level, curr_level)
             prev_level = curr_level
 
         # Create output neurons
@@ -35,7 +35,7 @@ class DeepNetwork:
             neuron = Neuron(activation_function=activation_function,
                             level_number=number_of_levels + 1)
             self._outputs.append(neuron)
-        DeepNetwork.connect_levels(prev_level, self._outputs)
+        Network.connect_levels(prev_level, self._outputs)
 
     @staticmethod
     def connect_levels(prev_level, next_level):
