@@ -133,7 +133,10 @@ class Neuron:
 
     @thetas.setter
     def thetas(self, thetas):
-        self._thetas = thetas
+        if len(self._thetas) != len(thetas):
+            raise ValueError("Size of input thetas [size=%d] is not equal internal thetas [size=%d] !!"
+                             .format(len(thetas), len(self._thetas)))
+        self._thetas = list(thetas)
 
     def add_input(self):
         self._thetas.append(1)
@@ -147,7 +150,8 @@ class Neuron:
     @inputs.setter
     def inputs(self, inputs):
         if len(self._inputs) != len(inputs):
-            raise ValueError()
+            raise ValueError("Size of input inputs [size=%d] is not equal internal inputs [size=%d] !!"
+                             .format(len(inputs), len(self._inputs)))
         self._inputs = list(inputs)
 
     @property
