@@ -41,14 +41,14 @@ class Neuron:
         same_level_type = has_level or has_not_level
         return same_level_type, has_level
 
-    def __init__(self, bias=None, level_number=None, activation_function=None):
+    def __init__(self, *thetas, bias=None, level_number=None, activation_function=None):
         if activation_function:
             arg_spec = inspect.signature(activation_function)
             if len(arg_spec.parameters) != 1:
                 raise ValueError(f'Activation function [{activation_function}] should have 1 argument !!')
         self._bias = bias
-        self._thetas = []
-        self._inputs = []
+        self._thetas = list(thetas)
+        self._inputs = list(None for theta in thetas)
         self._slots = []
         self._next_slot = 0
         self._output = 0
@@ -58,9 +58,11 @@ class Neuron:
 
     def __lshift__(self, neuron):
         neuron._connect_to(self)
+        return self
 
     def __rshift__(self, neuron):
         self._connect_to(neuron)
+        return neuron
 
     def _connect_to(self, neuron):
         same_level_type, has_level = Neuron.is_neurons_same_level_type(self, neuron)
@@ -112,24 +114,31 @@ class Neuron:
         return self._output
 
     @property
-    def bias(self, bias):
-        self._bias = bias
+    def bias(self): pass
 
     @bias.getter
     def bias(self):
         return self._bias
 
+    @bias.setter
+    def bias(self, bias):
+        self._bias = bias
+
     @property
-    def thetas(self, thetas):
-        self._thetas = thetas
+    def thetas(self): pass
 
     @thetas.getter
     def thetas(self):
         return self._thetas
 
+    @thetas.setter
+    def thetas(self, thetas):
+        self._thetas = thetas
+
     def add_input(self):
         self._thetas.append(1)
         self._inputs.append(None)
+        return self
 
     @property
     def inputs(self):

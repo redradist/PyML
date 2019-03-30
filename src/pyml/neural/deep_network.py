@@ -1,5 +1,3 @@
-import math
-
 from pyml.neural.neuron import Neuron
 
 
